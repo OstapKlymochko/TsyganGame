@@ -6,7 +6,7 @@ namespace game
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine(Values.Ace.GetHashCode());
         }
     }
 }
