@@ -20,10 +20,20 @@ namespace game
         public Values Value { get; init; }
         public Suits Suit { get; init; }
 
+        public Card(Values value, Suits suit)
+        {
+            this.Value = value;
+            this.Suit = suit;
+        }
+
 		public override bool Equals(object obj)
 		{
             Card card = obj as Card;
 			return this.Value == card.Value && this.Suit == card.Suit;
+		}
+		public override string ToString()
+		{
+			return $"{this.Value} of {this.Suit}";
 		}
 	}
 }

@@ -23,7 +23,7 @@ namespace game
             cards = new List<Card>();
         }
 
-        void TakeCard(Card card) => cards.Add(card);
+        public void TakeCard(Card card) => cards.Add(card);
 
         Card RemoveCard(int index)
         {
