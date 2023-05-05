@@ -19,5 +19,11 @@ namespace game
     {
         public Values Value { get; init; }
         public Suits Suit { get; init; }
-    }
+
+		public override bool Equals(object obj)
+		{
+            Card card = obj as Card;
+			return this.Value == card.Value && this.Suit == card.Suit;
+		}
+	}
 }
