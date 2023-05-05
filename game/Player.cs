@@ -25,7 +25,12 @@ namespace game
 
         public void TakeCard(Card card) => cards.Add(card);
 
-        Card RemoveCard(int index)
+        public Card DropRandomCard()
+        {
+            return RemoveCard(BelieveHandler.Next(0, cards.Count));
+        }
+
+        private Card RemoveCard(int index)
         {
             if (index > cards.Count - 1 || index < 0)
                 throw new ArgumentOutOfRangeException($"Index {index} is out of range");

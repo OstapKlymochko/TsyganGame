@@ -8,10 +8,12 @@ namespace game
 {
 	public static class GameTable
 	{
-		
-		private static Stack<Card> initRandomDeck()
+		private static Random random = new Random();
+		private static Stack<Card> InitRandomDeck()
 		{
-			List<Card> deck = new List<Card>();
+            Stack<Card> cards = new Stack<Card>();
+            Random rng = new Random();
+            List<Card> deck = new List<Card>();
 			foreach (Suits suit in Enum.GetValues(typeof(Suits)))
 			{
 				foreach (Values value in Enum.GetValues(typeof(Values)))
@@ -19,12 +21,6 @@ namespace game
 					deck.Add(new Card(value, suit));
 				}
 			}
-			foreach (Card c in deck)
-			{
-				Console.WriteLine(c);
-			}
-			Stack<Card> cards = new Stack<Card>();
-			Random rng = new Random();
 			int n = deck.Count;
 			while (n > 1)
 			{
@@ -40,6 +36,7 @@ namespace game
 			}
 			return cards;
 		}
+
 		private static void giveAllCards(Player _player, Stack<Card> _cards)
 		{
 			while (_cards.Count > 0)
@@ -47,16 +44,50 @@ namespace game
 				_player.TakeCard(_cards.Pop());
 			}
 		}
-		public static void startGame(IEnumerable<Player> _players)
+
+        private static void DistributeCards(Stack<Card> deck, List<Player> players)
 		{
-			Stack<Card> deck = initRandomDeck();
-			Stack<Card> CardsOnTable = new Stack<Card>();
-			List<Player> players;
-            Console.WriteLine("\n\n\n\n\n");
-            foreach (Card c in deck)
+			int CardsToGiveOut = deck.Count / players.Count;
+			for (int i = 0; i <= CardsToGiveOut; i++)
 			{
-                Console.WriteLine(c);
-            }
+				foreach (Player p in players)
+					p.TakeCard(deck.Pop());
+			}
+		}
+
+		private static Player FindOneDidntBeliever(List<Player> players, List<int> ThoseDidntBelieveIndexes)
+		{
+			return players[ThoseDidntBelieveIndexes[random.Next(0, ThoseDidntBelieveIndexes.Count - 1)]];
+		}
+
+		public static void startGame(IEnumerable<Player> PlayersParam)
+		{
+			Stack<Card> deck = InitRandomDeck(); 
+			List<Player> players = new List<Player>(PlayersParam);
+			DistributeCards(deck, players);
+			//List<Player> ThoseDidntBelieve = new List<Player>();
+            Stack<Card> CardsOnTable = new Stack<Card>();
+			List<int> ThoseDidntBelieveIndexes = new List<int>(players.Count);
+            while (players.TrueForAll(x => x.CardCount > 0))
+			{
+				foreach(Player p in players)
+				{
+					CardsOnTable.Push(p.DropRandomCard());
+					for (int i = 0;i <= players.Count; i++) 
+					{
+						if (!players[i].Believe()) ThoseDidntBelieveIndexes.Add(i);
+					}
+
+					if (ThoseDidntBelieveIndexes.Count > 0)
+					{
+						Player DidntBeliever = FindOneDidntBeliever(players, ThoseDidntBelieveIndexes);
+						//if (p.LastGiven)
+					}
+				}
+			}
+
+
+            
 		}
 	}
 }
